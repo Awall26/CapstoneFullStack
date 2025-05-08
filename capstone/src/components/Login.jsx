@@ -57,7 +57,9 @@ const Login = ({ setToken, data, setData }) => {
           />
         </div>
 
-        <button type="submit">Login</button>
+        <button className="submit" type="submit">
+          Login
+        </button>
       </form>
     </div>
   );
