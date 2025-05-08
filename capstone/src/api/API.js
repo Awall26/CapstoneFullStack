@@ -3,7 +3,15 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const api = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:3000",
+    // prepareHeaders: (headers, { getState }) => {
+    //   const token = getState().user?.token;
+    //   // if (token) {
+    //   //   headers.set("authorization", `Bearer ${token}`);
+    //   // }
+    //   // return headers;
+    // },
   }),
+
   reducerPath: "api",
   tagTypes: ["Users", "Products", "Cart"],
   endpoints: (builder) => ({
@@ -16,7 +24,12 @@ export const api = createApi({
       providesTags: ["Products"],
     }),
     fetchUserCart: builder.query({
-      query: (user_id) => `/api/user_cart/${user_id}`,
+      query: ({ user_id, token }) => ({
+        url: `/api/user_cart/${user_id}`,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
       providesTags: ["Cart"],
     }),
     fetchSingleUser: builder.query({
@@ -28,7 +41,10 @@ export const api = createApi({
       providesTags: ["Products"],
     }),
     addToCart: builder.mutation({
-      query: ({ user_id, product_id }) => ({
+      query: ({ user_id, product_id, token }) => ({
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         url: `/api/user_cart/${user_id}`,
         method: "POST",
         body: { product_id },
@@ -53,6 +69,9 @@ export const api = createApi({
     }),
     changeQuantity: builder.mutation({
       query: ({ user_id, product_id, quantity }) => ({
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         url: `/api/user_cart/${user_id}`,
         method: "PUT",
         body: { product_id, quantity },
@@ -75,6 +94,9 @@ export const api = createApi({
     }),
     removeFromCart: builder.mutation({
       query: ({ user_id, product_id }) => ({
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         url: `/api/user_cart/${user_id}`,
         method: "DELETE",
         body: { product_id },
@@ -90,6 +112,10 @@ export const api = createApi({
         body: {
           username: credentials.username,
           password: credentials.password,
+        },
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
         },
       }),
       invalidatesTags: ["Users"],

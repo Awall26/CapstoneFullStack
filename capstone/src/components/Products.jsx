@@ -1,10 +1,8 @@
 import { useFetchProductsQuery } from "../api/API";
-import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const Products = () => {
   const { data, isLoading, isError } = useFetchProductsQuery();
-  console.log("Product data:", data);
 
   if (isLoading)
     return (
@@ -33,8 +31,6 @@ const Products = () => {
             />
             <div className="product-info">
               <h3>{product.name}</h3>
-              {/* <p>{product.description}</p> */}
-              {/* <p>${product.price}</p> */}
               <button className="details-button">
                 <Link to={`/api/products/${product.id}`}>View Details</Link>
               </button>
