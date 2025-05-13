@@ -1,8 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
+import { getCart } from "../components/UserSlice";
+import { useSelector } from "react-redux";
 
 const Navigation = ({ token, onLogout }) => {
   const navigate = useNavigate();
-
+  const cart = useSelector(getCart);
   const handleLogout = () => {
     if (onLogout) {
       onLogout();
@@ -16,7 +18,7 @@ const Navigation = ({ token, onLogout }) => {
         <Link to="/">Home</Link>
         {token ? (
           <>
-            <Link to="/cart">Cart</Link>
+            <Link to="/cart">Cart ({cart.length})</Link>
             <button onClick={handleLogout} className="auth-button">
               Logout
             </button>

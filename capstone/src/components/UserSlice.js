@@ -25,12 +25,31 @@ const userSlice = createSlice({
       state.cart = action.payload;
     },
     addToCart: (state, action) => {
-      state.cart.push(action.payload);
+      console.log("Reducer received:", action.payload);
+      const existingItem = state.cart.find(
+        (item) => item.id === action.payload.id
+      );
+
+      if (existingItem) {
+        existingItem.quantity = (existingItem.quantity || 1) + 1;
+      } else {
+        state.cart.push({
+          ...action.payload,
+          quantity: 1,
+        });
+      }
+      console.log("Updated cart:", state.cart);
     },
     removeFromCart: (state, action) => {
       state.cart = state.cart.filter(
         (product) => product.id !== action.payload
       );
+    },
+    updateQuantity: (state, action) => {
+      const item = state.cart.find(
+        (item) => item.id === action.payload.productId
+      );
+      if (item) item.quantity = action.payload.quantity;
     },
     logout: (state) => {
       state.user = null;
@@ -38,11 +57,9 @@ const userSlice = createSlice({
       state.cart = [];
       state.token = null;
     },
-    login: (state, action) => {
-      state.user = action.payload.user;
-      state.isLoggedIn = true;
-      state.cart = action.payload.cart;
-      state.token = action.payload.token;
+    setToken: (state, action) => {
+      console.log("Look here", action);
+      state.token = action.payload;
     },
   },
 });
@@ -53,8 +70,9 @@ export const {
   setCart,
   addToCart,
   removeFromCart,
+  updateQuantity,
   logout,
-  login,
+  setToken,
 } = userSlice.actions;
 
 export const getUserID = (state) => state.user.user?.id;

@@ -1,19 +1,21 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useLoginMutation } from "../api/API";
+import { setToken } from "./UserSlice";
+import { useDispatch } from "react-redux";
 
-const Login = ({ setToken, data, setData }) => {
+const Login = ({ data, setData }) => {
   const navigate = useNavigate();
   const [login] = useLoginMutation();
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const result = await login(data);
-      localStorage.setItem("user", JSON.stringify(result));
       console.log(result);
+      console.log(result.data);
       if (result.data) {
-        setToken(result.data.token);
+        dispatch(setToken(result.data.token));
         navigate("/");
       }
     } catch (error) {
@@ -25,7 +27,6 @@ const Login = ({ setToken, data, setData }) => {
     setData({
       ...data,
       [e.target.name]: e.target.value,
-      // [e.target.password]: e.target.value,
     });
   };
 
@@ -60,6 +61,12 @@ const Login = ({ setToken, data, setData }) => {
         <button className="submit" type="submit">
           Login
         </button>
+        <p>
+          Don't have an account?{" "}
+          <Link to="/register">
+            <span>Register Here</span>
+          </Link>
+        </p>
       </form>
     </div>
   );

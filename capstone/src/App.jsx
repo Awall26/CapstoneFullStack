@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "./index.css";
 import Products from "./components/Products";
@@ -7,17 +7,24 @@ import SingleProduct from "./components/SingleProduct";
 import Navigation from "./components/Navigation";
 import Login from "./components/Login";
 import Cart from "./components/Cart";
+import { getToken, logout } from "./components/UserSlice";
+import { useSelector, useDispatch } from "react-redux";
+import Register from "./components/Register";
 
 function App() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [state, setState] = useState();
-  const [token, setToken] = useState(null);
+  // const [token, setToken] = useState(null);
   const [data, setData] = useState({
     username: "",
     password: "",
   });
+  const token = useSelector(getToken);
 
   const handleLogout = () => {
-    setToken(null);
+    dispatch(logout());
+    navigate("/");
   };
 
   return (
@@ -30,12 +37,13 @@ function App() {
       <section>
         <Routes>
           <Route path="/" element={<Products />} />
-          <Route path="/api/products/:product_id" element={<SingleProduct />} />
+          <Route
+            path="/api/products/:product_id"
+            element={<SingleProduct token={token} />}
+          />
           <Route
             path="/api/login"
-            element={
-              <Login data={data} setData={setData} setToken={setToken} />
-            }
+            element={<Login data={data} setData={setData} />}
           />
           <Route
             path="/cart"
@@ -44,6 +52,7 @@ function App() {
               <Cart data={data} setData={setData} token={token} />
             }
           />
+          <Route path="/register" element={<Register />} />
         </Routes>
       </section>
     </div>

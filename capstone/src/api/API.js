@@ -3,13 +3,14 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const api = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:3000",
-    // prepareHeaders: (headers, { getState }) => {
-    //   const token = getState().user?.token;
-    //   // if (token) {
-    //   //   headers.set("authorization", `Bearer ${token}`);
-    //   // }
-    //   // return headers;
-    // },
+    prepareHeaders: (headers, { getState }) => {
+      const token = getState().user?.token;
+      console.log(getState());
+      if (token) {
+        headers.set("authorization", `${token}`);
+      }
+      return headers;
+    },
   }),
 
   reducerPath: "api",
@@ -24,11 +25,8 @@ export const api = createApi({
       providesTags: ["Products"],
     }),
     fetchUserCart: builder.query({
-      query: ({ user_id, token }) => ({
-        url: `/api/user_cart/${user_id}`,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      query: () => ({
+        url: `/api/user_cart/`,
       }),
       providesTags: ["Cart"],
     }),
@@ -41,10 +39,7 @@ export const api = createApi({
       providesTags: ["Products"],
     }),
     addToCart: builder.mutation({
-      query: ({ user_id, product_id, token }) => ({
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      query: ({ user_id, product_id }) => ({
         url: `/api/user_cart/${user_id}`,
         method: "POST",
         body: { product_id },
@@ -69,9 +64,6 @@ export const api = createApi({
     }),
     changeQuantity: builder.mutation({
       query: ({ user_id, product_id, quantity }) => ({
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
         url: `/api/user_cart/${user_id}`,
         method: "PUT",
         body: { product_id, quantity },
@@ -93,11 +85,8 @@ export const api = createApi({
       invalidatesTags: ["Products"],
     }),
     removeFromCart: builder.mutation({
-      query: ({ user_id, product_id }) => ({
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        url: `/api/user_cart/${user_id}`,
+      query: ({ product_id }) => ({
+        url: `/api/user_cart/`,
         method: "DELETE",
         body: { product_id },
       }),
@@ -129,6 +118,10 @@ export const api = createApi({
           password: userData.password,
           name: userData.name,
           mailing_address: userData.mailing_address,
+        },
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
         },
       }),
       invalidatesTags: ["Users"],
