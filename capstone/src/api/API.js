@@ -5,7 +5,6 @@ export const api = createApi({
     baseUrl: "http://localhost:3000",
     prepareHeaders: (headers, { getState }) => {
       const token = getState().user?.token;
-      console.log(getState());
       if (token) {
         headers.set("authorization", `${token}`);
       }
@@ -26,7 +25,7 @@ export const api = createApi({
     }),
     fetchUserCart: builder.query({
       query: () => ({
-        url: `/api/user_cart/`,
+        url: `/api/user_cart`,
       }),
       providesTags: ["Cart"],
     }),
@@ -39,21 +38,13 @@ export const api = createApi({
       providesTags: ["Products"],
     }),
     addToCart: builder.mutation({
-      query: ({ user_id, product_id }) => ({
-        url: `/api/user_cart/${user_id}`,
+      query: ({ product_id, quantity = 1 }) => ({
+        url: `/api/user_cart`,
         method: "POST",
-        body: { product_id },
+        body: { product_id, quantity },
       }),
       invalidatesTags: ["Cart"],
     }),
-    // createUser: builder.mutation({
-    //   query: (userData) => ({
-    //     url: "/api/users",
-    //     method: "POST",
-    //     body: userData,
-    //   }),
-    //   invalidatesTags: ["Users"],
-    // }),
     createProduct: builder.mutation({
       query: (productData) => ({
         url: "/api/products",
@@ -63,12 +54,11 @@ export const api = createApi({
       invalidatesTags: ["Products"],
     }),
     changeQuantity: builder.mutation({
-      query: ({ user_id, product_id, quantity }) => ({
-        url: `/api/user_cart/${user_id}`,
+      query: ({ product_id, quantity }) => ({
+        url: `/api/user_cart/${product_id}`,
         method: "PUT",
-        body: { product_id, quantity },
+        body: { quantity },
       }),
-      invalidatesTags: ["Cart"],
     }),
     editProduct: builder.mutation({
       query: ({ product_id, productData }) => ({
@@ -86,9 +76,15 @@ export const api = createApi({
     }),
     removeFromCart: builder.mutation({
       query: ({ product_id }) => ({
-        url: `/api/user_cart/`,
+        url: `/api/user_cart/${product_id}`,
         method: "DELETE",
-        body: { product_id },
+      }),
+      invalidatesTags: ["Cart"],
+    }),
+    clearCart: builder.mutation({
+      query: () => ({
+        url: `/api/user_cart`,
+        method: "DELETE",
       }),
       invalidatesTags: ["Cart"],
     }),
@@ -101,6 +97,9 @@ export const api = createApi({
         body: {
           username: credentials.username,
           password: credentials.password,
+          name: credentials.name,
+          mailing_address: credentials.mailing_address,
+          is_admin: credentials.is_admin,
         },
         headers: {
           "Content-Type": "application/json",
@@ -140,6 +139,7 @@ export const {
   useEditProductMutation,
   useDeleteProductMutation,
   useRemoveFromCartMutation,
+  useClearCartMutation,
   useLoginMutation,
   useCreateUserMutation,
 } = api;

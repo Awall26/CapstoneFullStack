@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useCreateUserMutation } from "../api/API";
 import { useDispatch } from "react-redux";
-import { setToken } from "./UserSlice";
+import { setToken, setUser } from "./UserSlice";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -30,8 +30,18 @@ const Register = () => {
     e.preventDefault();
     try {
       const result = await createUser(formData);
-      dispatch(setToken(result.data.token));
-      navigate("/api/login");
+      if (result.data) {
+        dispatch(setToken(result.data.token));
+        dispatch(
+          setUser({
+            user: result.data.user,
+            isLoggedIn: true,
+            is_admin: result.data.user.is_admin,
+            token: result.data.token,
+          })
+        );
+        navigate("/");
+      }
     } catch (error) {
       console.error("Registration failed:", error);
     }
@@ -86,6 +96,12 @@ const Register = () => {
           />
         </div>
         <button type="submit">Register</button>
+        <p>
+          Already have an account?{" "}
+          <Link to="/login">
+            <span>Login Here</span>
+          </Link>
+        </p>
       </form>
     </div>
   );

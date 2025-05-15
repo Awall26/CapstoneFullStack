@@ -1,10 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
-import { getCart } from "../components/UserSlice";
-import { useSelector } from "react-redux";
+import { useFetchUserCartQuery } from "../api/API";
 
 const Navigation = ({ token, onLogout }) => {
   const navigate = useNavigate();
-  const cart = useSelector(getCart);
+  const { data: cart = [] } = useFetchUserCartQuery();
+  const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+
   const handleLogout = () => {
     if (onLogout) {
       onLogout();
@@ -18,7 +19,7 @@ const Navigation = ({ token, onLogout }) => {
         <Link to="/">Home</Link>
         {token ? (
           <>
-            <Link to="/cart">Cart ({cart.length})</Link>
+            <Link to="/cart">Cart ({totalItems})</Link>
             <button onClick={handleLogout} className="auth-button">
               Logout
             </button>

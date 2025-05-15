@@ -10,12 +10,12 @@ import Cart from "./components/Cart";
 import { getToken, logout } from "./components/UserSlice";
 import { useSelector, useDispatch } from "react-redux";
 import Register from "./components/Register";
+import Users from "./components/Users";
+import Confirmation from "./components/Confirmation";
 
 function App() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [state, setState] = useState();
-  // const [token, setToken] = useState(null);
   const [data, setData] = useState({
     username: "",
     password: "",
@@ -38,7 +38,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Products />} />
           <Route
-            path="/api/products/:product_id"
+            path="api/products/:product_id"
             element={<SingleProduct token={token} />}
           />
           <Route
@@ -47,12 +47,11 @@ function App() {
           />
           <Route
             path="/cart"
-            element={
-              // isLoggedIn && userId ?
-              <Cart data={data} setData={setData} token={token} />
-            }
+            element={<Cart data={data} setData={setData} token={token} />}
           />
           <Route path="/register" element={<Register />} />
+          <Route path="/users" element={<Users />} />
+          <Route path="/confirmation" element={<Confirmation />} />
         </Routes>
       </section>
     </div>

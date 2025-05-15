@@ -1,11 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export const initialState = {
-  user: null,
-  isLoggedIn: false,
-  isAdmin: false,
-  cart: [],
+const initialState = {
+  id: null,
+  username: null,
+  name: null,
+  mailing_address: null,
   token: null,
+  is_admin: false,
+  cart: [],
 };
 
 const userSlice = createSlice({
@@ -13,71 +15,41 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action) => {
-      state.user = action.payload.user;
-      state.isLoggedIn = action.payload.isLoggedIn;
-      state.cart = action.payload.cart;
-      state.token = action.payload.token;
+      state.id = action.payload.id;
+      state.username = action.payload.username;
+      state.name = action.payload.name;
+      state.mailing_address = action.payload.mailing_address;
+      state.is_admin = action.payload?.is_admin || false;
     },
-    setIsLoggedIn: (state, action) => {
-      state.isLoggedIn = action.payload;
+    setToken: (state, action) => {
+      state.token = action.payload;
     },
     setCart: (state, action) => {
       state.cart = action.payload;
     },
-    addToCart: (state, action) => {
-      console.log("Reducer received:", action.payload);
-      const existingItem = state.cart.find(
-        (item) => item.id === action.payload.id
-      );
-
-      if (existingItem) {
-        existingItem.quantity = (existingItem.quantity || 1) + 1;
-      } else {
-        state.cart.push({
-          ...action.payload,
-          quantity: 1,
-        });
-      }
-      console.log("Updated cart:", state.cart);
-    },
-    removeFromCart: (state, action) => {
-      state.cart = state.cart.filter(
-        (product) => product.id !== action.payload
-      );
-    },
-    updateQuantity: (state, action) => {
-      const item = state.cart.find(
-        (item) => item.id === action.payload.productId
-      );
-      if (item) item.quantity = action.payload.quantity;
-    },
     logout: (state) => {
-      state.user = null;
-      state.isLoggedIn = false;
-      state.cart = [];
+      state.id = null;
+      state.username = null;
+      state.name = null;
+      state.mailing_address = null;
       state.token = null;
-    },
-    setToken: (state, action) => {
-      console.log("Look here", action);
-      state.token = action.payload;
+      state.is_admin = false;
+      // Keep cart in state even after logout
     },
   },
 });
 
-export const {
-  setUser,
-  setIsLoggedIn,
-  setCart,
-  addToCart,
-  removeFromCart,
-  updateQuantity,
-  logout,
-  setToken,
-} = userSlice.actions;
+export const { setUser, setToken, setCart, logout } = userSlice.actions;
 
-export const getUserID = (state) => state.user.user?.id;
+export const getUser = (state) => ({
+  id: state.user.id,
+  username: state.user.username,
+  name: state.user.name,
+  mailing_address: state.user.mailing_address,
+  is_admin: state.user.is_admin,
+});
 export const getToken = (state) => state.user.token;
+export const getIsAdmin = (state) => state.user.is_admin;
 export const getCart = (state) => state.user.cart;
-export const getIsLoggedIn = (state) => state.user.isLoggedIn;
 
 export default userSlice.reducer;
