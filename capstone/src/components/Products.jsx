@@ -74,7 +74,7 @@ const Products = () => {
   return (
     <>
       {isAdmin ? (
-        <div className="admin-section">
+        <div className="admin-section accent-border green-glow-bottom">
           <h2>Admin Controls</h2>
           <button
             className="admin-nav-button"
@@ -130,7 +130,7 @@ const Products = () => {
         <section className="products-container">
           {data.map((product) => (
             <div key={product.id} className="product-wrapper">
-              <div className="product-card">
+              <div className="product-card green-glow-bottom  accent-border">
                 <img
                   className="product-image"
                   src={product.img_url}
@@ -138,12 +138,12 @@ const Products = () => {
                 />
                 <div className="product-info">
                   <h3>{product.name}</h3>
-                  <Link
-                    to={`/api/products/${product.id}`}
+                  <button
                     className="details-button"
+                    onClick={() => navigate(`/api/products/${product.id}`)}
                   >
                     View Details
-                  </Link>
+                  </button>
                 </div>
               </div>
               {isAdmin && (

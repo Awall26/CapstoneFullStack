@@ -66,7 +66,15 @@ const Cart = () => {
 
   if (!cart?.length) {
     return (
-      <section>
+      <section
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          minHeight: "40vh",
+        }}
+      >
         <h2>Your cart is empty</h2>
       </section>
     );
@@ -83,7 +91,10 @@ const Cart = () => {
           if (!cartProduct) return null;
 
           return (
-            <div key={cartProduct.id} className="cart-item">
+            <div
+              key={cartProduct.id}
+              className="cart-item accent-border green-glow-bottom"
+            >
               <img
                 className="cart-image"
                 src={cartProduct.img_url}
@@ -97,10 +108,7 @@ const Cart = () => {
                   <select
                     value={product.quantity || 1}
                     onChange={(e) =>
-                      handleQuantityChange(
-                        cartProduct.product_id,
-                        e.target.value
-                      )
+                      handleQuantityChange(product.product_id, e.target.value)
                     }
                   >
                     {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (

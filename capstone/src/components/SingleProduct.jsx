@@ -41,7 +41,7 @@ const SingleProduct = () => {
     );
   }
   return (
-    <section className="single-product-card">
+    <section className="single-product-card accent-border green-glow-bottom">
       <img className="product-image" src={data.img_url} alt={data.name} />
       <h2>{data.name}</h2>
       <p>{data.description}</p>

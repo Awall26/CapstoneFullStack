@@ -29,8 +29,8 @@ function App() {
 
   return (
     <div>
-      <header>
-        <h1>GAMESBOI</h1>
+      <header className="green-glow-bottom">
+        <h1 className="green-glow-text">GAMESBOI</h1>
         <Navigation token={token} onLogout={handleLogout} />
       </header>
 

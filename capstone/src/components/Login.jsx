@@ -46,7 +46,7 @@ const Login = ({ data, setData }) => {
 
   return (
     <div className="login-wrapper">
-      <div className="login-inner">
+      <div className="login-inner accent-border green-glow-bottom">
         <h1>Login</h1>
         <form onSubmit={handleSubmit}>
           <div className="form-group">

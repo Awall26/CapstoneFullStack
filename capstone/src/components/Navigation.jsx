@@ -16,16 +16,23 @@ const Navigation = ({ token, onLogout }) => {
   return (
     <nav className="navigation">
       <div className="nav-links">
-        <Link to="/">Home</Link>
+        <Link className="green-glow-text" to="/">
+          Home
+        </Link>
         {token ? (
           <>
-            <Link to="/cart">Cart ({totalItems})</Link>
-            <button onClick={handleLogout} className="auth-button">
+            <Link className="nav-link green-glow-text" to="/cart">
+              Cart ({totalItems})
+            </Link>
+            <button
+              onClick={handleLogout}
+              className="auth-button green-glow-text"
+            >
               Logout
             </button>
           </>
         ) : (
-          <Link to="/api/login" className="auth-button">
+          <Link to="/api/login" className="auth-button green-glow-text">
             Login
           </Link>
         )}

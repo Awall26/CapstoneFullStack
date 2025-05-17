@@ -35,7 +35,7 @@ const Users = () => {
 
   return (
     <>
-      <div className="admin-section">
+      <div className="admin-section accent-border green-glow-bottom">
         <h2>Admin Controls</h2>
         <button className="admin-nav-button" onClick={() => navigate("/")}>
           View Products
@@ -45,7 +45,10 @@ const Users = () => {
         <h1 className="users-title">Users</h1>
         <div className="users-container">
           {users.map((user) => (
-            <div key={user.id} className="user-card">
+            <div
+              key={user.id}
+              className="user-card accent-border green-glow-bottom"
+            >
               <div className="user-info">
                 <h3>{user.username}</h3>
                 <p>Name: {user.name}</p>
