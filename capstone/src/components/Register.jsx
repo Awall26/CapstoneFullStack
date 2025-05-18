@@ -95,7 +95,9 @@ const Register = () => {
             required
           />
         </div>
-        <button type="submit">Register</button>
+        <div className="form-group">
+          <button type="submit">Register</button>
+        </div>
         <p>
           Already have an account?{" "}
           <Link to="/login">
