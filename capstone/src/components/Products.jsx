@@ -59,15 +59,15 @@ const Products = () => {
 
   if (isLoading)
     return (
-      <section>
-        <h1>Grabbing games for you</h1>
+      <section className="loading-section">
+        <h1 className="loading-message">Grabbing games for you</h1>
       </section>
     );
 
   if (isError)
     return (
-      <section>
-        <h1>Oops! Game Over!</h1>
+      <section className="loading-section">
+        <h1 className="loading-message">Oops! Game Over!</h1>
       </section>
     );
 
