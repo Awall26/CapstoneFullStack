@@ -1,6 +1,6 @@
 # My Capstone Project 🎓
 
-Hey there! 👋 This is my final project for my course. I built this web app using React and Vite because they're super fast and fun to work with!
+Hey! 👋 This is my final project for my course. I built this web app using React and Vite because they're super fast and fun to work with!
 
 ## What's This All About? 🤔
 
@@ -64,7 +64,7 @@ A: Your cart and account information are automatically saved as you use the app.
 
 ## Check It Out! 📸
 
-[Add some screenshots of your app here - I'll add mine once I take them!]
+image.png
 
 ## What I Used 🛠️
 
@@ -128,8 +128,4 @@ Feel free to suggest improvements or fix bugs! Just let me know what you're thin
 
 ## Who Made This? 👥
 
-[Your name here] - A student who's super excited about web development! 🎉
-
-## License 📝
-
-[Add your license here - probably something like MIT or whatever your school requires]
+Andrew Walter
