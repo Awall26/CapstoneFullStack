@@ -1,5 +1,7 @@
 # My Capstone Project 🎓
 
+Link: gamesboi.netlify.app
+
 Hey! 👋 This is my final project for my course. I built this web app using React and Vite because they're super fast and fun to work with!
 
 ## What's This All About? 🤔

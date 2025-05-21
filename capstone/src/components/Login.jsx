@@ -13,7 +13,7 @@ const Login = ({ data, setData }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); // Clear any previous errors
+    setError("");
     try {
       const result = await login(data);
       if (result.data) {

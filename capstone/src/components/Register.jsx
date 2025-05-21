@@ -15,6 +15,7 @@ const Register = () => {
   const [createUser, { isLoading, isError }] = useCreateUserMutation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [error, setError] = useState("");
 
   if (isError) {
     return <div>Hmmm... something went wrong</div>;
