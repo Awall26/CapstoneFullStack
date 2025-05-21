@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import React, { useState } from "react";
 import { useFetchSingleProductQuery, useAddToCartMutation } from "../api/API";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { getToken } from "./UserSlice";
 
@@ -11,6 +11,7 @@ const SingleProduct = () => {
   const [addToCart] = useAddToCartMutation();
   const userToken = useSelector(getToken);
   const [showMessage, setShowMessage] = useState(false);
+  const navigate = useNavigate();
 
   const handleAddToCart = async () => {
     if (!data) return;
@@ -47,9 +48,7 @@ const SingleProduct = () => {
       <p>{data.description}</p>
       <p>${data.price}</p>
       <div className="single-product-buttons">
-        <button>
-          <Link to="/">Back</Link>
-        </button>
+        <button onClick={() => navigate("/")}>Back</button>
         {userToken ? (
           <button onClick={handleAddToCart}>Add to Cart</button>
         ) : (

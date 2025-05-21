@@ -47,9 +47,13 @@ const Products = () => {
   const handleEditProduct = async (e) => {
     e.preventDefault();
     try {
+      const updatedProduct = {
+        ...editingProduct,
+        id: editingProduct.id,
+      };
       await editProduct({
         product_id: editingProduct.id,
-        productData: editingProduct,
+        productData: updatedProduct,
       });
       setEditingProduct(null);
     } catch (error) {
@@ -175,7 +179,7 @@ const Products = () => {
               <label>Product Name</label>
               <input
                 type="text"
-                value={editingProduct.name}
+                value={editingProduct.name || ""}
                 onChange={(e) =>
                   setEditingProduct({ ...editingProduct, name: e.target.value })
                 }
@@ -186,7 +190,7 @@ const Products = () => {
               <label>Description</label>
               <input
                 type="text"
-                value={editingProduct.description}
+                value={editingProduct.description || ""}
                 onChange={(e) =>
                   setEditingProduct({
                     ...editingProduct,
@@ -200,7 +204,7 @@ const Products = () => {
               <label>Price</label>
               <input
                 type="number"
-                value={editingProduct.price}
+                value={editingProduct.price || ""}
                 onChange={(e) =>
                   setEditingProduct({
                     ...editingProduct,
@@ -214,7 +218,7 @@ const Products = () => {
               <label>Image URL</label>
               <input
                 type="text"
-                value={editingProduct.img_url}
+                value={editingProduct.img_url || ""}
                 onChange={(e) =>
                   setEditingProduct({
                     ...editingProduct,
