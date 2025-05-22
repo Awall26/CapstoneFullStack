@@ -12,15 +12,10 @@ const Register = () => {
     mailing_address: "",
   });
 
-  const [createUser, { isLoading, isError }] = useCreateUserMutation();
+  const [createUser, { isLoading }] = useCreateUserMutation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  if (isError) {
-    return <div>Hmmm... something went wrong</div>;
-  } else if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -28,24 +23,47 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
     try {
       const result = await createUser(formData);
+      console.log("Registration response:", result);
+
+      if (result.error) {
+        console.error("Registration error:", result.error);
+        if (result.error.data?.message?.includes("duplicate key value")) {
+          setError(
+            "This username is already taken. Please choose a different one."
+          );
+        } else {
+          setError("Registration failed. Please try again.");
+        }
+        return;
+      }
+
       if (result.data) {
-        dispatch(setToken(result.data.token));
+        const userData = result.data;
+        dispatch(setToken(userData.token));
         dispatch(
           setUser({
-            user: result.data.user,
+            id: userData.id,
+            username: userData.username,
+            name: userData.name,
+            mailing_address: userData.mailing_address,
             isLoggedIn: true,
-            is_admin: result.data.user.is_admin,
-            token: result.data.token,
+            is_admin: userData.is_admin || false,
           })
         );
-        navigate("/");
+        navigate("/api/login");
       }
     } catch (error) {
       console.error("Registration failed:", error);
+      setError("Registration failed. Please try again.");
     }
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="form-container">
@@ -95,12 +113,13 @@ const Register = () => {
             required
           />
         </div>
+        {error && <div className="error-message">{error}</div>}
         <div className="form-group">
           <button type="submit">Register</button>
         </div>
         <p>
           Already have an account?{" "}
-          <Link to="/login">
+          <Link to="/api/login">
             <span>Login Here</span>
           </Link>
         </p>

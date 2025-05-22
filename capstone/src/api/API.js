@@ -67,6 +67,7 @@ export const api = createApi({
         method: "PUT",
         body: productData,
       }),
+      invalidatesTags: ["Products", "Cart"],
     }),
     deleteProduct: builder.mutation({
       query: (product_id) => ({
