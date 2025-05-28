@@ -1,6 +1,5 @@
-import React from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import React, { useState } from "react";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import "./index.css";
 import Products from "./components/Products";
 import SingleProduct from "./components/SingleProduct";
@@ -16,10 +15,12 @@ import Confirmation from "./components/Confirmation";
 function App() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const [data, setData] = useState({
     username: "",
     password: "",
   });
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const token = useSelector(getToken);
 
   const handleLogout = () => {
@@ -27,11 +28,19 @@ function App() {
     navigate("/");
   };
 
+  const handleCartToggle = () => {
+    setIsCartOpen(!isCartOpen);
+  };
+
   return (
     <div>
       <header className="green-glow-bottom">
         <h1 className="green-glow-text">GAMESBOI</h1>
-        <Navigation token={token} onLogout={handleLogout} />
+        <Navigation
+          token={token}
+          onLogout={handleLogout}
+          onCartToggle={handleCartToggle}
+        />
       </header>
 
       <section>
@@ -45,15 +54,16 @@ function App() {
             path="/api/login"
             element={<Login data={data} setData={setData} />}
           />
-          <Route
-            path="/cart"
-            element={<Cart data={data} setData={setData} token={token} />}
-          />
           <Route path="/register" element={<Register />} />
           <Route path="/users" element={<Users />} />
           <Route path="/confirmation" element={<Confirmation />} />
         </Routes>
       </section>
+      {token &&
+        location.pathname !== "/confirmation" &&
+        location.pathname !== "/" && (
+          <Cart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+        )}
     </div>
   );
 }
