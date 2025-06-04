@@ -57,30 +57,6 @@ const Cart = ({ isOpen, onClose }) => {
     }
   };
 
-  if (cartLoading || productsLoading) {
-    return (
-      <section>
-        <h2>Loading cart...</h2>
-      </section>
-    );
-  }
-
-  if (!cart?.length) {
-    return (
-      <section
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          minHeight: "40vh",
-        }}
-      >
-        <h2>Your cart is empty</h2>
-      </section>
-    );
-  }
-
   return (
     <>
       <div
@@ -97,61 +73,72 @@ const Cart = ({ isOpen, onClose }) => {
         </button>
         <h1 className="cart-title">Your Cart</h1>
         <div className="cart-items">
-          {cart.map((product) => {
-            const cartProduct = products?.find(
-              (p) => p.id === product.product_id
-            );
-            if (!cartProduct) return null;
+          {cartLoading || productsLoading ? (
+            <h2>Loading cart...</h2>
+          ) : !cart?.length ? (
+            <h2>Your cart is empty</h2>
+          ) : (
+            cart.map((product) => {
+              const cartProduct = products?.find(
+                (p) => p.id === product.product_id
+              );
+              if (!cartProduct) return null;
 
-            return (
-              <div
-                key={cartProduct.id}
-                className="cart-item accent-border green-glow-bottom"
-              >
-                <img
-                  className="cart-image"
-                  src={cartProduct.img_url}
-                  alt={cartProduct.name}
-                />
-                <div className="item-details">
-                  <h3>{cartProduct.name}</h3>
-                  <p>Price: ${cartProduct.price}</p>
-                  <div className="quantity-selector">
-                    <label>Quantity: </label>
-                    <select
-                      value={product.quantity || 1}
-                      onChange={(e) =>
-                        handleQuantityChange(product.product_id, e.target.value)
-                      }
+              return (
+                <div
+                  key={cartProduct.id}
+                  className="cart-item accent-border green-glow-bottom"
+                >
+                  <img
+                    className="cart-image"
+                    src={cartProduct.img_url}
+                    alt={cartProduct.name}
+                  />
+                  <div className="item-details">
+                    <h3>{cartProduct.name}</h3>
+                    <p>Price: ${cartProduct.price}</p>
+                    <div className="quantity-selector">
+                      <label>Quantity: </label>
+                      <select
+                        value={product.quantity || 1}
+                        onChange={(e) =>
+                          handleQuantityChange(
+                            product.product_id,
+                            e.target.value
+                          )
+                        }
+                      >
+                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
+                          <option key={num} value={num}>
+                            {num}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <p>
+                      Subtotal: $
+                      {(cartProduct.price * (product.quantity || 1)).toFixed(2)}
+                    </p>
+                    <button
+                      onClick={() => handleRemoveFromCart(cartProduct.id)}
+                      className="remove-button"
                     >
-                      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
-                        <option key={num} value={num}>
-                          {num}
-                        </option>
-                      ))}
-                    </select>
+                      Remove
+                    </button>
                   </div>
-                  <p>
-                    Subtotal: $
-                    {(cartProduct.price * (product.quantity || 1)).toFixed(2)}
-                  </p>
-                  <button
-                    onClick={() => handleRemoveFromCart(cartProduct.id)}
-                    className="remove-button"
-                  >
-                    Remove
-                  </button>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          )}
         </div>
-        <div className="cart-total">
-          <h3>Total: ${calculateTotal()}</h3>
-          <button onClick={handleCheckout} className="checkout-button">
-            Checkout
-          </button>
-        </div>
+        {cart?.length > 0 && (
+          <div className="cart-total">
+            <h3>Total: ${calculateTotal()}</h3>
+            <button onClick={handleCheckout} className="checkout-button">
+              Checkout
+            </button>
+          </div>
+        )}
       </section>
     </>
   );

@@ -59,11 +59,9 @@ function App() {
           <Route path="/confirmation" element={<Confirmation />} />
         </Routes>
       </section>
-      {token &&
-        location.pathname !== "/confirmation" &&
-        location.pathname !== "/" && (
-          <Cart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
-        )}
+      {token && location.pathname !== "/confirmation" && (
+        <Cart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+      )}
     </div>
   );
 }
